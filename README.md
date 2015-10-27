@@ -1,2 +1,2 @@
 # SharePointCI
-SharePoint Continues Integration with PowerShell
+SharePoint Continious Integration by using PowerShell.
