@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SupportedActions>
+  <Action Name="Provision" Command="Invoke-ProvisionActions" ScriptPath="Invoke-ProvisionActions.ps1">
+    <Action Name="WebApplication" Command="Build-SPWebApplication" ScriptPath="Build-SPWebApplication.ps1"/>
+    <Action Name="Website" Command="Build-SPWebsite" ScriptPath="Build-SPWebsite.ps1"/>
+    <Action Name="ListItems" Command="Provision-SPListItems" ScriptPath="SPList.ps1"/>
+  </Action>
+  <Action Name="Features" Command="Invoke-SPFeatures" ScriptPath="Invoke-SPFeatures.ps1"/>
+  <Action Name="IIS" Command="Invoke-IISActions" ScriptPath="Invoke-IISActions.ps1"/>
+  <Action Name="TimerJobs" Command="Invoke-SPTimerJobActions" ScriptPath="Invoke-SPTimerJobActions.ps1"/>
+  <Action Name="Variation" Command="Invoke-SPVariationActions" ScriptPath="Invoke-SPVariationActions.ps1"/>
+  <Action Name="HostsFile" Command="Invoke-HostsFileActions" ScriptPath="Invoke-HostsFileActions.ps1"/>
+</SupportedActions>
