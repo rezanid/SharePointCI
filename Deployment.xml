@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Deployment version="1.0.0.7">
+  <BeforeDeploy>
+    <Copy>
+      <Item Source="ConfigFiles\mssdmn.exe.config" Destination="" OverwriteIfExists="False"/>
+      <Item Source="ConfigFiles\owstimer.exe.config" Destination="" OverwriteIfExists="False"/>
+      <Item Source="" Target="ConfigFiles\wsmprovhost.exe.config" OverwriteIfExists="False"/>
+    </Copy>
+    <Provision>
+      <!--Other possible attributes: SuperUser, SuperReader -->
+      <WebApplication Name="SharePoint - Dev"
+                      Port="80"
+                      HostHeader="dev"
+                      Url="http://dev"
+                      ApplicationPool="SharePoint - Dev"
+                      ApplicationPoolAccount="AXA-BE\SVC_DEV_IPC_MOSS"
+                      AuthenticationMode="Claims"
+                      AuthenticationProvider="Windows">
+        <ManagedPaths>
+          <Path RelativeUrl="epro" Explicit="True" />
+          <Path RelativeUrl="ing" Explicit="True" />
+        </ManagedPaths>
+        <Extensions>
+          <Internet Name="SharePoint - DevI"
+                HostHeader="devi"
+                Url="http://devi"
+                Port="80"
+                AuthenticationMode="Claims"
+                AuthenticationProvider="Federation AXAUID Claim" />
+        </Extensions>
+        <ContentDatabases>
+          <ContentDatabase Name="WSS_Content_Dev"
+                           MaxSiteCount="10"
+                           WarningSiteCount="8"
+                           Sever="WVM11023">
+            <SiteCollections>
+              <SiteCollection Name="Dev"
+                              Description="Development"
+                              Url="http://dev"
+                              LCID="1033"
+                              Template="STS#1"
+                              OwnerAccount="AXA-BE\DRNI381"
+                              OwnerEmail=""
+                              SecondOwnerAccount="i:0&#501;.t|federation axauid claim|drni381"
+                              SecondOwnerEmail=""/>
+              <SiteCollection Name="EPro"
+                              Description="Extranet Pro"
+                              Url="http://dev/epro"
+                              LCID="1033"
+                              Template="CMSPUBLISHING#0"
+                              OwnerAccount="AXA-BE\DRNI381"
+                              OwnerEmail=""
+                              SecondOwnerAccount="i:0&#501;.t|federation axauid claim|drni381"
+                              SecondOwnerEmail=""/>
+              <SiteCollection Name="ING"
+                              Description="Extranet Pro - ING"
+                              Url="http://dev/ing"
+                              LCID="1033"
+                              Template="CMSPUBLISHING#0"
+                              OwnerAccount="AXA-BE\DRNI381"
+                              OwnerEmail=""
+                              SecondOwnerAccount="i:0&#501;.t|federation axauid claim|drni381"
+                              SecondOwnerEmail=""/>
+            </SiteCollections>
+          </ContentDatabase>
+        </ContentDatabases>
+        <RequiredSolutions>
+          <Solution Name="be.axa.shared.sharepoint.clientpack.wsp" />
+          <Solution Name="be.axa.shared.sharepoint.branding.wsp" />
+        </RequiredSolutions>
+        <AppSettings FilePath="ConfigFiles\FrontEnd.web.config.AppSettings.xml"/>
+      </WebApplication>
+    </Provision>
+    <Variation SiteUrl="http://dev/epro"
+           Home="http://dev/epro, /epro"
+           AutoSpawn="True"
+           AutoSpawnStopAfterDelete="False"
+           UpdateWebParts="True"
+           CopyResources="False"
+           SendNotificationEmail="False"
+           SourceVarRootWebTemplate="CMSPUBLISHING#0">
+      <Label Title="SOURCE" DisplayName="Source" Description="Source" Language="en-US" Locale="2057" CreationMode="Publishing Sites and All Pages" IsSource="True" />
+      <Label Title="FR" DisplayName="FR" Description="French" Language="fr-FR" Locale="2060" CreationMode="Publishing Sites and All Pages" />
+      <Label Title="NL" DisplayName="NL" Description="Dutch" Language="nl-NL" Locale="2067" CreationMode="Publishing Sites and All Pages" />
+    </Variation>
+    <Variation SiteUrl="http://dev/ing"
+           Home="http://dev/ing, /ing"
+           AutoSpawn="True"
+           AutoSpawnStopAfterDelete="False"
+           UpdateWebParts="True"
+           CopyResources="False"
+           SendNotificationEmail="False"
+           SourceVarRootWebTemplate="CMSPUBLISHING#0">
+      <Label Title="SOURCE" DisplayName="Source" Description="Source" Language="en-US" Locale="2057" CreationMode="Publishing Sites and All Pages" IsSource="True" />
+      <Label Title="FR" DisplayName="FR" Description="French" Language="fr-FR" Locale="2060" CreationMode="Publishing Sites and All Pages" />
+      <Label Title="NL" DisplayName="NL" Description="Dutch" Language="nl-NL" Locale="2067" CreationMode="Publishing Sites and All Pages" />
+    </Variation>
+    <Provision>
+      <!--EPRO SubSites-->
+      <Website Description="Home" Template="CMSPUBLISHING#0" Title="Home" Url="http://dev/epro/source/home"/>
+      <Website Description="Applications" Template="CMSPUBLISHING#0" Title="Applications" Url="http://dev/epro/source/home/applications"/>
+      <Website Description="Product Info" Template="CMSPUBLISHING#0" Title="Product Info" Url="http://dev/epro/source/home/productinfo"/>
+      <Website Description="Marketing Hub" Template="CMSPUBLISHING#0" Title="Marketing Hub" Url="http://dev/epro/source/home/marketinghub"/>
+      <Website Description="News &amp; Events" Template="CMSPUBLISHING#0" Title="News &amp; Events" Url="http://dev/epro/source/home/newsevents"/>
+      <Website Description="My Extranet Pro" Template="CMSPUBLISHING#0" Title="My Extranet Pro" Url="http://dev/epro/source/home/myepro"/>
+      <Website Description="GPS" Template="CMSPUBLISHING#0" Title="GPS" Url="http://dev/epro/source/home/gps"/>
+      <Website Description="Help &amp; Support" Template="CMSPUBLISHING#0" Title="Help &amp; Support" Url="http://dev/epro/source/home/support"/>
+      <!--ING SubSites-->
+      <Website Description="Home" Template="CMSPUBLISHING#0" Title="Home" Url="http://dev/ing/source/home"/>
+      <Website Description="Applications" Template="CMSPUBLISHING#0" Title="Applications" Url="http://dev/ing/source/home/applications"/>
+      <Website Description="Product Info" Template="CMSPUBLISHING#0" Title="Product Info" Url="http://dev/ing/source/home/productinfo"/>
+      <Website Description="GPS" Template="CMSPUBLISHING#0" Title="GPS" Url="http://dev/ing/source/home/gps"/>
+      <Website Description="Help &amp; Support" Template="CMSPUBLISHING#0" Title="Help &amp; Support" Url="http://dev/ing/source/home/support"/>
+    </Provision>
+    <Features>
+      <!--Master Page-->
+      <activate Description="Client Pack" Id="fcf41950-663a-4cd0-a924-420a058746b0" Url="http://dev"/>
+      <activate Description="Master Page (Responsive)" Id="d82f739b-a6a3-4f62-8627-d1ae8b24d006" Url="http://dev/epro"/>
+      <activate Description="Master Page (Responsive)" Id="d82f739b-a6a3-4f62-8627-d1ae8b24d006" Url="http://dev/ing"/>
+      <!--Websites EPRO-->
+      <deactivate Description="be.axa.ca.Extranetpro.GPSPages" Id="f13c64ec-6827-453f-ab5c-cdc560112592" Url="http://dev/epro/source/home/gps"/>
+      <deactivate Description="be.axa.ca.Extranetpro.ProductPages" Id="d69e9b33-f3ce-45dd-8722-7bb889bbe56a" Url="http://dev/epro/source/home/productinfo"/>
+      <deactivate Description="be.axa.ca.ExtranetPro.ApplicationsPage" Id="b691f4c7-4994-47c0-8cb9-6561268a46a2" Url="http://dev/epro/source/home/applications"/>
+      <deactivate Description="be.axa.ca.Extranetpro.MarketingHubPage" Id="2d2e932c-c18b-4f87-9e04-77fabe59f555" Url="http://dev/epro/source/home/marketinghub"/>
+      <deactivate Description="be.axa.ca.ExtranetPro.MyExtranetProPage" Id="0e4df89f-afcf-46ef-9813-05a68edd27a1" Url="http://dev/epro/source/home/myepro"/>
+      <deactivate Description="be.axa.ca.ExtranetPro.NewsAndEventsPage" Id="f4968c21-44e1-415c-b2ba-e9fd247cbec9" Url="http://dev/epro/source/home/newsevents"/>
+      <deactivate Description="be.axa.ca.Extranetpro.ContentTypesBinding" Id="0ca46ab0-a42f-45f0-a96a-b46d62973f66" Url="http://dev/epro/source/home/newsevents"/>
+      <deactivate Description="be.axa.ca.Extranetpro.HelpAndSupportPage" Id="19d36fe8-0768-445f-80f0-8d8df4e6590c" Url="http://dev/epro/source/home/support"/>
+      <deactivate Description="be.axa.ca.Extranetpro.HomePages" Id="2aa7ea41-6b01-45d4-87e0-a8194ea246fb" Url="http://dev/epro/source/home"/>
+      <!--Websites ING-->
+      <deactivate Description="be.axa.ca.Extranetpro.ProductPages" Id="d69e9b33-f3ce-45dd-8722-7bb889bbe56a" Url="http://dev/epro/source/home/productinfo"/>
+      <deactivate Description="be.axa.ca.ExtranetPro.ApplicationsPage" Id="b691f4c7-4994-47c0-8cb9-6561268a46a2" Url="http://dev/epro/source/home/applications"/>
+      <deactivate Description="be.axa.ca.Extranetpro.HelpAndSupportPage" Id="19d36fe8-0768-445f-80f0-8d8df4e6590c" Url="http://dev/epro/source/home/support"/>
+      <deactivate Description="be.axa.ca.Extranetpro.HomePages" Id="2aa7ea41-6b01-45d4-87e0-a8194ea246fb" Url="http://dev/epro/source/home"/>
+      <!--SiteCollection EPRO -->
+      <deactivate Description="be.axa.ca.Extranetpro.DelegateControls" Id="25969cee-2fa5-4f6f-a604-c6e284790e74" Url="http://dev/epro"/>
+      <deactivate Description="be.axa.ca.Extranetpro.PageLayouts" Id="f21423d1-0052-456f-b727-aa7268fa4e52" Url="http://dev/epro"/>
+      <deactivate Description="be.axa.ca.Extranetpro.WebParts" Id="d123eb43-9f56-4574-abbd-b48e5dcda389" Url="http://dev/epro"/>
+      <deactivate Description="be.axa.ca.Extranetpro.CADLists" Id="6760ef4f-e9e2-4885-a824-604ddd2b66b9" Url="http://dev/epro"/>
+      <deactivate Description="be.axa.ca.Extranetpro.ContentTypes" Id="807d55b5-77fc-423c-bae3-aedd861a96c4" Url="http://dev/epro"/>
+      <deactivate Description="be.axa.ca.ExtranetPro.SearchConfiguration" Id="7bcb90a0-4af9-4f29-bf07-a6cb33530c84" Url="http://dev/epro"/>
+      <deactivate Description="be.axa.ca.ExtranetPro.Administration" Id="328991b5-49c3-47c9-9e9e-b65cf95db74c" Url="http://dev/epro"/>
+      <!--SiteCollection ING -->
+      <deactivate Description="be.axa.ca.Extranetpro.DelegateControls" Id="25969cee-2fa5-4f6f-a604-c6e284790e74" Url="http://dev/ing"/>
+      <deactivate Description="be.axa.ca.Extranetpro.PageLayouts" Id="f21423d1-0052-456f-b727-aa7268fa4e52" Url="http://dev/ing"/>
+      <deactivate Description="be.axa.ca.Extranetpro.WebParts" Id="d123eb43-9f56-4574-abbd-b48e5dcda389" Url="http://dev/ing"/>
+      <deactivate Description="be.axa.ca.Extranetpro.CADLists" Id="6760ef4f-e9e2-4885-a824-604ddd2b66b9" Url="http://dev/ing"/>
+      <deactivate Description="be.axa.ca.Extranetpro.ContentTypes" Id="807d55b5-77fc-423c-bae3-aedd861a96c4" Url="http://dev/ing"/>
+      <deactivate Description="be.axa.ca.ExtranetPro.SearchConfiguration" Id="7bcb90a0-4af9-4f29-bf07-a6cb33530c84" Url="http://dev/ing"/>
+      <deactivate Description="be.axa.ca.ExtranetPro.Administration" Id="328991b5-49c3-47c9-9e9e-b65cf95db74c" Url="http://dev/ing"/>
+      <!--WebApp-->
+      <deactivate Description="be.axa.ca.Extranetpro.TimerJobs" Id="f3868603-768d-40ed-a34d-08588eb1b8cb" Url="http://dev"/>
+      <deactivate Description="be.axa.ca.Extranetpro.CleanEproHtmlTimerJobs" Id="6098f931-8447-4e53-bc1a-7ba8b04cbb39" Url="http://dev"/>
+      <deactivate Description="be.axa.ca.ExtranetPro.SharedSession" Id="93a36eb1-5948-44ed-82a4-642bc1a4132b" Url="http://dev/"/>
+      <deactivate Description="be.axa.ca.Extranetpro.UrlRewrite" Id="1f8cdfca-c7a6-4f11-8520-b02459b79479" Url="http://dev/"/>
+      <!--OBSOLET:<deactivate Description="be.axa.ca.Extranetpro.WebConfigModification" Id="435a571a-ff4a-44dc-a7bd-1769067bbcc0" Url="http://dev"/>-->
+      <!--FARM-->
+      <deactivate Description="be.axa.ca.Extranetpro.BCS.Library" Id="4d3288a9-ce52-4a0e-af83-b0ff78e1d40e"/>
+      <deactivate Description="be.axa.ca.ExtranetPro.BCS.WebContent" Id="990e3b90-f13b-47ba-8d58-f8c123eeb5ee"/>
+    </Features>
+    <Provision>
+      <ListItems Web="http://dev/epro" List="MasterPageResponsiveConfig">
+        <ListItem MatchColumn="Title" MatchValue="/epro">
+          <Column Title="Title" Value="/epro"/>
+          <Column Title="Configuration" FilePath="MasterPage.xml"/>
+        </ListItem>
+      </ListItems>
+      <ListItems Web="http://dev/ing" List="MasterPageResponsiveConfig">
+        <ListItem MatchColumn="Title" MatchValue="/ing">
+          <Column Title="Title" Value="/ing"/>
+          <Column Title="Configuration" FilePath="MasterPage.ing.xml"/>
+        </ListItem>
+      </ListItems>
+    </Provision>
+  </BeforeDeploy>
+  <Deploy>
+    <Solutions>
+      <Solution Force="true" Path="C:\CODE\ExtranetPro\Source\ExtranetPro\bin\Debug-DRNI381\be.axa.ca.Extranetpro.wsp" UpgradeExisting="false">
+        <WebApplications>
+          <WebApplication>http://dev/</WebApplication>
+        </WebApplications>
+      </Solution>
+    </Solutions>
+  </Deploy>
+  <AfterDeploy>
+    <Features>
+      <!--FARM-->
+      <activate Description="be.axa.ca.ExtranetPro.BCS.WebContent" Id="990e3b90-f13b-47ba-8d58-f8c123eeb5ee"/>
+      <activate Description="be.axa.ca.Extranetpro.BCS.Library" Id="4d3288a9-ce52-4a0e-af83-b0ff78e1d40e"/>
+      <!--WebApp-->
+      <!--OBSOLET:<activate Description="be.axa.ca.Extranetpro.WebConfigModification" Id="435a571a-ff4a-44dc-a7bd-1769067bbcc0" Url="http://dev"/>-->
+      <activate Description="be.axa.ca.Extranetpro.UrlRewrite" Id="1f8cdfca-c7a6-4f11-8520-b02459b79479" Url="http://dev/"/>
+      <activate Description="be.axa.ca.ExtranetPro.SharedSession" Id="93a36eb1-5948-44ed-82a4-642bc1a4132b" Url="http://dev/"/>
+      <activate Description="be.axa.ca.Extranetpro.CleanEproHtmlTimerJobs" Id="6098f931-8447-4e53-bc1a-7ba8b04cbb39" Url="http://dev"/>
+      <activate Description="be.axa.ca.Extranetpro.TimerJobs" Id="f3868603-768d-40ed-a34d-08588eb1b8cb" Url="http://dev"/>
+      <!--SiteCollection EPRO -->
+      <activate Description="be.axa.ca.ExtranetPro.SearchConfiguration" Id="7bcb90a0-4af9-4f29-bf07-a6cb33530c84" Url="http://dev/epro"/>
+      <activate Description="be.axa.ca.Extranetpro.ContentTypes" Id="807d55b5-77fc-423c-bae3-aedd861a96c4" Url="http://dev/epro"/>
+      <activate Description="be.axa.ca.Extranetpro.WebParts" Id="d123eb43-9f56-4574-abbd-b48e5dcda389" Url="http://dev/epro"/>
+      <activate Description="be.axa.ca.Extranetpro.PageLayouts" Id="f21423d1-0052-456f-b727-aa7268fa4e52" Url="http://dev/epro"/>
+      <activate Description="be.axa.ca.Extranetpro.DelegateControls" Id="25969cee-2fa5-4f6f-a604-c6e284790e74" Url="http://dev/epro"/>
+      <activate Description="be.axa.ca.Extranetpro.CADLists" Id="6760ef4f-e9e2-4885-a824-604ddd2b66b9" Url="http://dev/epro"/>
+      <activate Description="be.axa.ca.ExtranetPro.Administration" Id="328991b5-49c3-47c9-9e9e-b65cf95db74c" Url="http://dev/epro"/>
+      <!--SiteCollection ING -->
+      <activate Description="be.axa.ca.ExtranetPro.SearchConfiguration" Id="7bcb90a0-4af9-4f29-bf07-a6cb33530c84" Url="http://dev/ing"/>
+      <activate Description="be.axa.ca.Extranetpro.ContentTypes" Id="807d55b5-77fc-423c-bae3-aedd861a96c4" Url="http://dev/ing"/>
+      <activate Description="be.axa.ca.Extranetpro.WebParts" Id="d123eb43-9f56-4574-abbd-b48e5dcda389" Url="http://dev/ing"/>
+      <activate Description="be.axa.ca.Extranetpro.PageLayouts" Id="f21423d1-0052-456f-b727-aa7268fa4e52" Url="http://dev/ing"/>
+      <activate Description="be.axa.ca.Extranetpro.DelegateControls" Id="25969cee-2fa5-4f6f-a604-c6e284790e74" Url="http://dev/ing"/>
+      <activate Description="be.axa.ca.Extranetpro.CADLists" Id="6760ef4f-e9e2-4885-a824-604ddd2b66b9" Url="http://dev/ing"/>
+      <activate Description="be.axa.ca.ExtranetPro.Administration" Id="328991b5-49c3-47c9-9e9e-b65cf95db74c" Url="http://dev/ing"/>
+      <!--Websites EPRO-->
+      <activate Description="be.axa.ca.Extranetpro.HomePages" Id="2aa7ea41-6b01-45d4-87e0-a8194ea246fb" Url="http://dev/epro/source/home"/>
+      <activate Description="be.axa.ca.Extranetpro.HelpAndSupportPage" Id="19d36fe8-0768-445f-80f0-8d8df4e6590c" Url="http://dev/epro/source/home/support"/>
+      <activate Description="be.axa.ca.Extranetpro.ContentTypesBinding" Id="0ca46ab0-a42f-45f0-a96a-b46d62973f66" Url="http://dev/epro/source/home/newsevents"/>
+      <activate Description="be.axa.ca.ExtranetPro.NewsAndEventsPage" Id="f4968c21-44e1-415c-b2ba-e9fd247cbec9" Url="http://dev/epro/source/home/newsevents"/>
+      <activate Description="be.axa.ca.ExtranetPro.ApplicationsPage" Id="b691f4c7-4994-47c0-8cb9-6561268a46a2" Url="http://dev/epro/source/home/applications"/>
+      <activate Description="be.axa.ca.Extranetpro.MarketingHubPage" Id="2d2e932c-c18b-4f87-9e04-77fabe59f555" Url="http://dev/epro/source/home/marketinghub"/>
+      <activate Description="be.axa.ca.ExtranetPro.MyExtranetProPage" Id="0e4df89f-afcf-46ef-9813-05a68edd27a1" Url="http://dev/epro/source/home/myepro"/>
+      <activate Description="be.axa.ca.Extranetpro.ProductPages" Id="d69e9b33-f3ce-45dd-8722-7bb889bbe56a" Url="http://dev/epro/source/home/productinfo"/>
+      <activate Description="be.axa.ca.Extranetpro.GPSPages" Id="f13c64ec-6827-453f-ab5c-cdc560112592" Url="http://dev/epro/source/home/gps"/>
+      <!--Websites ING-->
+      <activate Description="be.axa.ca.Extranetpro.HomePages" Id="2aa7ea41-6b01-45d4-87e0-a8194ea246fb" Url="http://dev/ing/source/home"/>
+      <activate Description="be.axa.ca.Extranetpro.HelpAndSupportPage" Id="19d36fe8-0768-445f-80f0-8d8df4e6590c" Url="http://dev/ing/source/home/support"/>
+      <activate Description="be.axa.ca.ExtranetPro.ApplicationsPage" Id="b691f4c7-4994-47c0-8cb9-6561268a46a2" Url="http://dev/ing/source/home/applications"/>
+      <activate Description="be.axa.ca.Extranetpro.ProductPages" Id="d69e9b33-f3ce-45dd-8722-7bb889bbe56a" Url="http://dev/epro/ing/home/productinfo"/>
+    </Features>
+    <IIS>
+      <Recycle AppPool="EPro - Service"/>
+      <Recycle AppPool="SharePoint - dev"/>
+      <!--<WarmUp Url="http://dev/epro/source/home/pages/welcome.aspx" />-->
+      <!--<WarmUp Url="http://devi/epro/svc/libraryservice.svc" />-->
+    </IIS>
+    <TimerJobs>
+      <Start Job="VariationsCreateHierarchies" WebApp="http://dev" WaitForCompletion="TRUE"/>
+
+      <!--This timer job creates peer pages on the target variation sites whenever a user
+          explicitly requests the creation of a variant of a page using the UI (Ribbon
+          or Site Manager) - e.g. if the Automatic Creation option has been disabled and
+          a user decides that a page needs to have a page variant in a different label.
+          By default, this timer job runs hourly.
+          Class: Microsoft.SharePoint.Publishing.Internal.CreateVariationPageJobDefinition -->
+      <!--<Start Job="VariationsCreatePage" WebApp="http://dev" WaitForCompletion="TRUE"/>-->
+
+      <!--This timer job creates peer sites when the Automatic Creation option has been
+          disabled and a user manually creates a new variation site using Site Manager.
+          By default, this timer job runs every 5 minutes.
+          Class: Microsoft.SharePoint.Publishing.Internal.CreateVariationSiteJobDefinition -->
+      <Start Job="VariationsCreateSite" WebApp="http://dev" WaitForCompletion="TRUE"/>
+
+      <!--Creates and updates peer pages in target variation label after a page in the
+          source variation label has been approved or after the update has been manually
+          requested by a user through the Ribbon. By default, this timer job runs hourly.
+          Class: Microsoft.SharePoint.Publishing.Internal.PropogateVariationPageJobDefinition-->
+      <Start Job="VariationsPropagatePage" WebApp="http://dev" WaitForCompletion="TRUE"/>
+
+      <!--Creates peer sites when the Automatic Creation option is enabled.
+          By default, this timer job runs every 5 minutes.
+          Class: Microsoft.SharePoint.Publishing.Internal.SpawnSitesJobDefinition-->
+      <Start Job="VariationsSpawnSites" WebApp="http://dev" WaitForCompletion="TRUE"/>
+
+      <!--Restarts the timer service. RecycleWarningMinutes is set to 3 in development
+          environment. The default value in production environment is 10.-->
+      <!--<Start Job="job-timer-recycle" WaitForCompletion="TRUE" />-->
+    </TimerJobs>
+  </AfterDeploy>
+</Deployment>
